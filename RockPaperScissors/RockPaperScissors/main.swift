@@ -6,7 +6,7 @@
 
 import Foundation
 
-enum Result {
+enum Result: CustomStringConvertible {
     case win
     case lose
     case draw
@@ -22,7 +22,7 @@ enum Result {
         }
     }
     
-    func resultMessage() -> String {
+    var description: String {
         switch self {
         case .win:
             return "이겼습니다!"
@@ -64,7 +64,7 @@ func rockPaperScissorsGame() -> Bool {
     if userHand == .exit { return false }
 
     let gameResult = Result.decideResult(defense: computerHand, offense: userHand)
-    print(gameResult.resultMessage())
+    print(gameResult.description)
 
     return true
 }
