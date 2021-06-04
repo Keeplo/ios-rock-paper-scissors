@@ -13,8 +13,7 @@ enum Result:CustomStringConvertible {
     case error
     case exit
 
-    // RPS : RockPaperScissors
-    static func decideRPSResult(defense: Hand, offense: Hand) -> Result {
+    static func decideRockPaperScissorsResult(defense: Hand, offense: Hand) -> Result {
         switch (defense, offense) {
         case (.scissors, .rock), (.rock, .paper), (.paper, .scissors):
             return .win
@@ -24,8 +23,7 @@ enum Result:CustomStringConvertible {
             return .draw
         }
     }
-    // MJB : Mook-Jjee-Bba
-    static func decideMJBResult(defense: Hand, offense: Hand) -> Result {
+    static func decideMookJjeeBbaResult(defense: Hand, offense: Hand) -> Result {
         switch (defense, offense) {
         case (.scissors, .rock), (.rock, .paper), (.paper, .scissors):
             return .draw
@@ -57,7 +55,7 @@ enum Hand: Int {
     case paper
     case inputError
     
-    func swapRockAndScissors() -> Hand {
+    func changeRockAndScissors() -> Hand {
         if self == .rock {
             return .scissors
         } else if self == .scissors {
@@ -80,9 +78,6 @@ enum Turn: CustomStringConvertible {
     }
 }
 
-let rockPaperScissorsMessage = "가위(1), 바위(2), 보(3)! <종료 : 0> : "
-let mookJjeeBbaMessage = " 묵(1), 찌(2), 빠(3)! <종료 : 0> : "
-
 func userInputNumber(_ alertMessage: String) -> Int {
     print(alertMessage, terminator: "")
     if let userInput = readLine(), let convertNumber = Int(userInput), (0...3).contains(convertNumber) {
@@ -93,21 +88,21 @@ func userInputNumber(_ alertMessage: String) -> Int {
     }
 }
 
-
 func makeRandomNumber() -> Int {
     return Int.random(in:1...3)
 }
 
-func requestResultDependsOnTurns(_ currentTurn: Turn, user userHand: Hand, computer computerHand: Hand) -> Result {
+func decideResultDependsOnTurns(_ currentTurn: Turn, user userHand: Hand, computer computerHand: Hand) -> Result {
     switch currentTurn {
     case .userAttack:
-        return Result.decideMJBResult(defense: computerHand, offense: userHand)
+        return Result.decideMookJjeeBbaResult(defense: computerHand, offense: userHand)
     case .computerAttack:
-        return Result.decideMJBResult(defense: userHand, offense: computerHand)
+        return Result.decideMookJjeeBbaResult(defense: userHand, offense: computerHand)
     }
 }
 
 func playRockPaperScissors() -> Result {
+    let rockPaperScissorsMessage = "가위(1), 바위(2), 보(3)! <종료 : 0> : "
     guard let userHand = Hand(rawValue: userInputNumber(rockPaperScissorsMessage)) else { return .error }
     guard let computerHand = Hand(rawValue: makeRandomNumber()) else { return .error }
 
@@ -116,18 +111,17 @@ func playRockPaperScissors() -> Result {
     } else if userHand == .inputError {
         return .error
     }
-    // 동작 확인 용 프린트
-//    print("사용자 \(userHand) / 컴퓨터 \(computerHand)")
-
-    let gameResult = Result.decideRPSResult(defense: computerHand, offense: userHand)
+    
+    let gameResult = Result.decideRockPaperScissorsResult(defense: computerHand, offense: userHand)
     print(gameResult.description)
 
     return gameResult
 }
 
 func playMookJjeeBba(_ currentTurn: inout Turn) -> Bool {
+    let mookJjeeBbaMessage = " 묵(1), 찌(2), 빠(3)! <종료 : 0> : "
     guard var userHand = Hand(rawValue: userInputNumber("[\(currentTurn.description) 턴]" + mookJjeeBbaMessage)) else { return true }
-    userHand = userHand.swapRockAndScissors()
+    userHand = userHand.changeRockAndScissors()
     guard let computerHand = Hand(rawValue: makeRandomNumber()) else { return true }
     
     if userHand == .inputExit {
@@ -136,21 +130,15 @@ func playMookJjeeBba(_ currentTurn: inout Turn) -> Bool {
         currentTurn = .computerAttack
         return true
     }
-    
-    // 동작 확인 용 프린트
-//    print("사용자 \(userHand) / 컴퓨터 \(computerHand) / 턴 \(currentTurn)")
-    
-    let mookJjeeBbaResult: Result = requestResultDependsOnTurns(currentTurn, user: userHand, computer: computerHand)
-    switch mookJjeeBbaResult {
-    case .win:
+        
+    let mookJjeeBbaResult: Result = decideResultDependsOnTurns(currentTurn, user: userHand, computer: computerHand)
+    if mookJjeeBbaResult == .win {
         print("\(currentTurn.description)의 승리!")
         return false
-    case .lose:
+    } else if mookJjeeBbaResult == .lose {
         currentTurn = currentTurn.swapTurn()
-    case .error:
+    } else if mookJjeeBbaResult == .error {
         currentTurn = .computerAttack
-    default:
-        break
     }
     print("\(currentTurn.description)의 턴입니다!")
     return true
