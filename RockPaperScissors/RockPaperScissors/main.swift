@@ -137,8 +137,6 @@ func playMookJjeeBba(_ currentTurn: inout Turn) -> Bool {
         return false
     } else if mookJjeeBbaResult == .lose {
         currentTurn = currentTurn.swapTurn()
-    } else if mookJjeeBbaResult == .error {
-        currentTurn = .computerAttack
     }
     print("\(currentTurn.description)의 턴입니다!")
     return true
