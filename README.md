@@ -1,9 +1,9 @@
-# NumberBaseball
+# RockPaperScissors
 ## Information
 * 프로젝트 기간 : 2021.05.31. ~ 2021.06.04.
 * 프로젝트 인원 : 2명 Marco(@Keeplo), Sanchez(@sanches37)
 * 프로젝트 소개 
-    > 숫자 입력으로 사용자의 가위바위보 또는 묵찌빠 패를 임의의 수로 생성된 컴퓨터의 패와 비교해서 묵찌빠 게임으 진행하는 콘솔앱
+    > 1~3 숫자 입력으로 선택한 사용자의 가위바위보 또는 묵찌빠 패를 임의의 수로 생성된 컴퓨터의 패와 비교해서 묵찌빠 게임을 진행하는 콘솔앱
 * Pull Requests
     * [Step 1](https://github.com/yagom-academy/ios-rock-paper-scissors/pull/61)
     * [Step 2](https://github.com/yagom-academy/ios-rock-paper-scissors/pull/70)
